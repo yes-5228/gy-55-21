@@ -4,6 +4,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
 
 import AppLayout from "./layouts/AppLayout.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import ZoneManagementPage from "./pages/ZoneManagementPage.jsx";
 import InboundPage from "./pages/InboundPage.jsx";
 import PickupPage from "./pages/PickupPage.jsx";
 import LockerMonitorPage from "./pages/LockerMonitorPage.jsx";
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/dashboard" replace /> },
       { path: "dashboard", element: <DashboardPage /> },
+      { path: "zones", element: <ZoneManagementPage /> },
       { path: "inbound", element: <InboundPage /> },
       { path: "pickup", element: <PickupPage /> },
       { path: "lockers", element: <LockerMonitorPage /> },

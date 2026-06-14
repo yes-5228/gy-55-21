@@ -1,20 +1,39 @@
 from django.core.management.base import BaseCommand
 
-from apps.lockers.models import LockerCell
+from apps.lockers.models import LockerCell, LockerZone
 from apps.parcels.services import inbound_parcel
 from apps.parcels.models import Parcel
 
 
 class Command(BaseCommand):
-    help = "Create demo locker cells and parcels for local verification."
+    help = "Create demo locker zones, cells and parcels for local verification."
 
     def handle(self, *args, **options):
-        for zone in ["A区", "B区"]:
+        zones_data = [
+            {"code": "A", "name": "A区", "description": "一层入口处"},
+            {"code": "B", "name": "B区", "description": "二层电梯旁"},
+        ]
+
+        zones = {}
+        for z_data in zones_data:
+            zone, _ = LockerZone.objects.get_or_create(
+                code=z_data["code"],
+                defaults={"name": z_data["name"], "description": z_data["description"], "is_active": True},
+            )
+            zones[zone.code] = zone
+
+        for zone_code, zone in zones.items():
             for index in range(1, 13):
                 size = LockerCell.Size.SMALL if index <= 4 else LockerCell.Size.MEDIUM if index <= 9 else LockerCell.Size.LARGE
+                cell_code = f"{zone_code}{index:02d}"
                 LockerCell.objects.get_or_create(
-                    code=f"{zone[0]}{index:02d}",
-                    defaults={"zone": zone, "size": size, "temperature": 23 + index / 10},
+                    code=cell_code,
+                    defaults={
+                        "zone": zone,
+                        "zone_name": zone.name,
+                        "size": size,
+                        "temperature": 23 + index / 10,
+                    },
                 )
 
         samples = [

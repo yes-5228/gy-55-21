@@ -57,7 +57,7 @@ export default function LockerMonitorPage() {
           rows={cells}
           columns={[
             { key: "code", title: "柜格" },
-            { key: "zone", title: "区域" },
+            { key: "zone", title: "区域", render: (row) => row.zone_display },
             { key: "size", title: "尺寸", render: (row) => row.size_label },
             { key: "temperature", title: "温度", render: (row) => `${row.temperature}°C` },
             { key: "status", title: "状态", render: (row) => <StatusBadge status={row.status} label={row.status_label} /> },
